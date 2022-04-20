@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class ColorRun extends Game {
 	public SpriteBatch batch;
-	Texture img;
 	GameScreen gameScreen;
 	
 	@Override
