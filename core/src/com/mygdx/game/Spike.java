@@ -1,9 +1,13 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+
+import java.util.LinkedList;
+import java.util.Random;
 
 public class Spike {
 
@@ -12,6 +16,8 @@ public class Spike {
     Rectangle boundingBox;
     Vector2 directionVector;
     int movementSpeed;
+    private static float spikeSpawnTimer = 0;
+    private static final float timeBetweenSpikeSpawns = 3f;
 
     TextureRegion spikeTexture;
 
@@ -37,5 +43,27 @@ public class Spike {
 
     public Vector2 getDirectionVector() {
         return directionVector;
+    }
+
+    public static void renderSpike(float delta, LinkedList<Spike> spikeList,Batch batch){
+        for (Spike spike : spikeList) {
+            moveSpike(spike, delta);
+            spike.draw(batch);
+        }
+    }
+
+    private static void moveSpike(Spike spike, float deltaTime){
+        float yMove = spike.getDirectionVector().y * spike.movementSpeed * deltaTime;
+        spike.translate(0,-spike.movementSpeed*deltaTime);
+    }
+
+    public static void spawnSpike(float deltaTime,LinkedList<Spike> spikeList,int WORLD_HEIGHT, TextureRegion spikeTextureRegion){
+        spikeSpawnTimer += deltaTime;
+        Random random = new Random();
+
+        if (spikeSpawnTimer > timeBetweenSpikeSpawns){
+            spikeList.add(new Spike(100,30,random.nextInt(361)+220,WORLD_HEIGHT-10,spikeTextureRegion));
+            spikeSpawnTimer -= timeBetweenSpikeSpawns;
+        }
     }
 }

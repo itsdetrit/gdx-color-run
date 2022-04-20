@@ -3,9 +3,12 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -14,45 +17,41 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.Random;
 
 public class GameScreen implements Screen {
 
     private Camera camera;
     private Viewport viewport;
-
     private SpriteBatch batch;
     private TextureAtlas textureAtlas;
-
     private TextureRegion background;
-
-    private TextureRegion dogTextureRegion,spikeTextureRegion,coinTextureRegion;
+    private TextureRegion dogTextureRegion,coinTextureRegion,spikeTextureRegion;
 
     private int backgroundOffSet;
-    private float timeBetweenSpikeSpawns = 3f;
-    private float spikeSpawnTimer = 0;
 
     private final int WORLD_WIDTH = 800;
     private final int WORLD_HEIGHT = 600;
 
     private Dog playerDog;
     private LinkedList<Spike> spikeList;
+    private LinkedList<Coin> coinList;
+    private BitmapFont font = new BitmapFont();
 
     public GameScreen(){
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH,WORLD_HEIGHT,camera);
-
         textureAtlas = new TextureAtlas("image.atlas");
-
         background = textureAtlas.findRegion("road2");
-
         backgroundOffSet = 0;
 
-
         dogTextureRegion = textureAtlas.findRegion("dog");
+        coinTextureRegion = textureAtlas.findRegion("coin");
         spikeTextureRegion = textureAtlas.findRegion("spike");
 
         playerDog = new Dog(230,50,50,WORLD_WIDTH/2,WORLD_HEIGHT/10,dogTextureRegion);
         spikeList = new LinkedList<>();
+        coinList = new LinkedList<>();
 
         batch = new SpriteBatch();
     }
@@ -63,18 +62,24 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void render(float deltatime) {
+    public void render(float deltaTime) {
         batch.begin();
-        renderBackground(deltatime);
-        detectInput(deltatime);
-        spawnSpike(deltatime);
-        ListIterator<Spike> spikeListIterator = spikeList.listIterator();
-        while (spikeListIterator.hasNext()){
-            Spike spike = spikeListIterator.next();
-            moveSpike(spike,deltatime);
-            spike.draw(batch);
-        }
+        renderBackground(deltaTime);
+
+        playerDog.detectInput(deltaTime,WORLD_WIDTH);
+        playerDog.detectSpikeCollisions(spikeList);
+
+        Spike.renderSpike(deltaTime,spikeList,batch);
+        Spike.spawnSpike(deltaTime,spikeList,WORLD_HEIGHT,spikeTextureRegion);
+        Coin.renderCoin(deltaTime,coinList,batch);
+        Coin.spawnCoin(deltaTime,coinList,WORLD_HEIGHT,coinTextureRegion);
+
+        font.setColor(new Color(0,1,0,1));
+        font.getData().setScale(1.5f,1.5f);
+        font.draw(batch,"HP :  "+ Dog.lifePoint,20,550);
+
         playerDog.draw(batch);
+
         batch.end();
     }
 
@@ -113,32 +118,25 @@ public class GameScreen implements Screen {
 
     }
 
-    private void detectInput(float deltatime){
-        float leftLimit,rightLimit;
-        leftLimit = -playerDog.boundingBox.x;
-        rightLimit = WORLD_WIDTH-playerDog.boundingBox.x - playerDog.boundingBox.width;
-
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && rightLimit > 0) {
-            playerDog.translate(Math.min(playerDog.movementSpeed * deltatime, rightLimit), 0f);
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && leftLimit < 0) {
-            playerDog.translate(Math.max(-playerDog.movementSpeed * deltatime, leftLimit), 0f);
-        }
-    }
-
-    private void spawnSpike(float deltatime){
-        spikeSpawnTimer += deltatime;
-
-        if (spikeSpawnTimer > timeBetweenSpikeSpawns){
-            spikeList.add(new Spike(100,30,WORLD_WIDTH/2,WORLD_HEIGHT/2,spikeTextureRegion));
-            spikeSpawnTimer -= timeBetweenSpikeSpawns;
-        }
-    }
-
-    private void moveSpike(Spike spike,float deltaTime){
-        float yMove = spike.getDirectionVector().y * spike.movementSpeed * deltaTime;
-        spike.translate(0,-spike.movementSpeed*deltaTime);
-
-    }
+//    public void renderCoin(float delta){
+//        for (Coin coin : coinList){
+//            moveCoin(coin,delta);
+//            coin.draw(batch);
+//        }
+//    }
+//
+//    private void spawnCoin(float deltaTime){
+//        coinSpawnTimer += deltaTime;
+//        Random random = new Random();
+//
+//        if (coinSpawnTimer > timeBetweenCoinSpawns){
+//            coinList.add(new Coin(30,30, random.nextInt(361)+220,WORLD_HEIGHT-10,coinTextureRegion ));
+//            coinSpawnTimer -= timeBetweenCoinSpawns;
+//        }
+//    }
+//
+//    private void moveCoin(Coin coin,float deltaTime){
+//        float yMove = coin.getDirectionVector().y * coin.movementSpeed * deltaTime;
+//        coin.translate(0,-coin.movementSpeed*deltaTime);
+//    }
 }

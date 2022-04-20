@@ -1,13 +1,18 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 import java.awt.*;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class Dog {
     float movementSpeed;
+    public static int lifePoint;
 
     Rectangle boundingBox;
 
@@ -25,6 +30,7 @@ public class Dog {
         this.height = height;
         this.dogTexture = dogTexture;
         this.boundingBox = new Rectangle(xCentre-width/2,yCentre-height/2,width,height);
+        this.lifePoint = 3;
     }
 
     public void draw(Batch batch){
@@ -33,5 +39,35 @@ public class Dog {
 
     public void translate(float xChange,float yChange){
         boundingBox.setPosition(boundingBox.x+xChange, boundingBox.y+yChange);
+    }
+
+    public boolean intersects(Rectangle otherRectangle) {
+        return boundingBox.overlaps(otherRectangle);
+    }
+
+    public void detectInput(float delta,int WORLD_WIDTH){
+        float leftLimit,rightLimit;
+        leftLimit = -this.boundingBox.x+120;
+        rightLimit = WORLD_WIDTH-this.boundingBox.x - this.boundingBox.width-120;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && rightLimit > 0) {
+            this.translate(Math.min(this.movementSpeed * delta, rightLimit), 0f);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && leftLimit < 0) {
+            this.translate(Math.max(-this.movementSpeed * delta, leftLimit), 0f);
+        }
+    }
+
+    public void detectSpikeCollisions(LinkedList<Spike> spikeList){
+        ListIterator<Spike> spikeListIterator = spikeList.listIterator();
+        while (spikeListIterator.hasNext()){
+            Spike spike = spikeListIterator.next();
+            if(this.intersects(spike.boundingBox)){
+                Dog.lifePoint -= 1;
+                spikeListIterator.remove();
+                break;
+            }
+        }
     }
 }
