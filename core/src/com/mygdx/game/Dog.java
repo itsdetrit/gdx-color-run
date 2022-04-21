@@ -13,6 +13,7 @@ import java.util.ListIterator;
 public class Dog {
     float movementSpeed;
     public static int lifePoint;
+    public static int scores;
 
     Rectangle boundingBox;
 
@@ -66,6 +67,18 @@ public class Dog {
             if(this.intersects(spike.boundingBox)){
                 Dog.lifePoint -= 1;
                 spikeListIterator.remove();
+                break;
+            }
+        }
+    }
+
+    public void detectCoinCollisions(LinkedList<Coin> coinList){
+        ListIterator<Coin> coinListIterator = coinList.listIterator();
+        while (coinListIterator.hasNext()){
+            Coin coin = coinListIterator.next();
+            if(this.intersects(coin.boundingBox)){
+                Dog.scores += 1;
+                coinListIterator.remove();
                 break;
             }
         }

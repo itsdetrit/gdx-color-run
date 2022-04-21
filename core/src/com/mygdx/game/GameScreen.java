@@ -68,6 +68,7 @@ public class GameScreen implements Screen {
 
         playerDog.detectInput(deltaTime,WORLD_WIDTH);
         playerDog.detectSpikeCollisions(spikeList);
+        playerDog.detectCoinCollisions(coinList);
 
         Spike.renderSpike(deltaTime,spikeList,batch);
         Spike.spawnSpike(deltaTime,spikeList,WORLD_HEIGHT,spikeTextureRegion);
@@ -77,6 +78,10 @@ public class GameScreen implements Screen {
         font.setColor(new Color(0,1,0,1));
         font.getData().setScale(1.5f,1.5f);
         font.draw(batch,"HP :  "+ Dog.lifePoint,20,550);
+
+        font.setColor(new Color(0,1,0,1));
+        font.getData().setScale(1.5f,1.5f);
+        font.draw(batch,"Scores :  "+ Dog.scores,20,520);
 
         playerDog.draw(batch);
 
@@ -117,26 +122,4 @@ public class GameScreen implements Screen {
     public void dispose() {
 
     }
-
-//    public void renderCoin(float delta){
-//        for (Coin coin : coinList){
-//            moveCoin(coin,delta);
-//            coin.draw(batch);
-//        }
-//    }
-//
-//    private void spawnCoin(float deltaTime){
-//        coinSpawnTimer += deltaTime;
-//        Random random = new Random();
-//
-//        if (coinSpawnTimer > timeBetweenCoinSpawns){
-//            coinList.add(new Coin(30,30, random.nextInt(361)+220,WORLD_HEIGHT-10,coinTextureRegion ));
-//            coinSpawnTimer -= timeBetweenCoinSpawns;
-//        }
-//    }
-//
-//    private void moveCoin(Coin coin,float deltaTime){
-//        float yMove = coin.getDirectionVector().y * coin.movementSpeed * deltaTime;
-//        coin.translate(0,-coin.movementSpeed*deltaTime);
-//    }
 }
