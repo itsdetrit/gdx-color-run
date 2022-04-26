@@ -14,8 +14,8 @@ public class Coin {
     Rectangle boundingBox;
     Vector2 directionVector;
     int movementSpeed;
-    private static float timeBetweenCoinSpawns = 3f;
-    private static float coinSpawnTimer = 0;
+    public static float timeBetweenCoinSpawns = 3f;
+    public static float coinSpawnTimer = 0;
 
     TextureRegion coinTexture;
 
@@ -63,5 +63,11 @@ public class Coin {
     private static void moveCoin(Coin coin, float deltaTime){
         float yMove = coin.getDirectionVector().y * coin.movementSpeed * deltaTime;
         coin.translate(0,-coin.movementSpeed*deltaTime);
+    }
+
+    public static void setCoinMovementSpeed(LinkedList<Coin> coinList,int movementSpeed){
+        for (Coin coin : coinList){
+            coin.movementSpeed = movementSpeed;
+        }
     }
 }

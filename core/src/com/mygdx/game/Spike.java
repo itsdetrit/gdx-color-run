@@ -16,8 +16,8 @@ public class Spike {
     Rectangle boundingBox;
     Vector2 directionVector;
     int movementSpeed;
-    private static float spikeSpawnTimer = 0;
-    private static final float timeBetweenSpikeSpawns = 3f;
+    public static float spikeSpawnTimer = 0;
+    public static float timeBetweenSpikeSpawns = 3f;
 
     TextureRegion spikeTexture;
 
@@ -64,6 +64,12 @@ public class Spike {
         if (spikeSpawnTimer > timeBetweenSpikeSpawns){
             spikeList.add(new Spike(100,30,random.nextInt(361)+220,WORLD_HEIGHT-10,spikeTextureRegion));
             spikeSpawnTimer -= timeBetweenSpikeSpawns;
+        }
+    }
+
+    public static void setSpikeMovementSpeed(LinkedList<Spike> spikeList,int movementSpeed){
+        for (Spike spike : spikeList){
+            spike.movementSpeed = movementSpeed;
         }
     }
 }

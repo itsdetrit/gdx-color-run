@@ -12,8 +12,8 @@ public class ColorRun extends Game {
 	
 	@Override
 	public void create () {
-		gameScreen = new GameScreen();
-		setScreen(gameScreen);
+		batch = new SpriteBatch();
+		setScreen(new MainMenuScreen(this));
 	}
 
 	@Override
@@ -24,11 +24,9 @@ public class ColorRun extends Game {
 	@Override
 	public void dispose () {
 		super.dispose();
-		gameScreen.dispose();
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		gameScreen.resize(width, height);
 	}
 }

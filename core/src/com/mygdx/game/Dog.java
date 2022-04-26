@@ -14,6 +14,9 @@ public class Dog {
     float movementSpeed;
     public static int lifePoint;
     public static int scores;
+    public static final int DOG_RUNNING = 0;
+    public static final int DOG_OVER = 1;
+    public int state;
 
     Rectangle boundingBox;
 
@@ -31,7 +34,8 @@ public class Dog {
         this.height = height;
         this.dogTexture = dogTexture;
         this.boundingBox = new Rectangle(xCentre-width/2,yCentre-height/2,width,height);
-        this.lifePoint = 3;
+        this.lifePoint = 1;
+        this.state = DOG_RUNNING;
     }
 
     public void draw(Batch batch){
@@ -67,6 +71,9 @@ public class Dog {
             if(this.intersects(spike.boundingBox)){
                 Dog.lifePoint -= 1;
                 spikeListIterator.remove();
+                if (Dog.lifePoint == 0){
+                    this.state = DOG_OVER;
+                }
                 break;
             }
         }
