@@ -17,7 +17,7 @@ public class Spike {
     Vector2 directionVector;
     int movementSpeed;
     public static float spikeSpawnTimer = 0;
-    public static float timeBetweenSpikeSpawns = 3f;
+    public static float timeBetweenSpikeSpawns = 1f;
 
     TextureRegion spikeTexture;
 
@@ -28,7 +28,7 @@ public class Spike {
         this.height = height;
         this.spikeTexture = spikeTexture;
         this.boundingBox = new Rectangle(xPosition-width/2,yPosition-height/2,width,height);
-        this.movementSpeed = 50;
+        this.movementSpeed = 200;
 
         directionVector = new Vector2(0, -1);
     }

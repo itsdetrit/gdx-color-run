@@ -14,7 +14,7 @@ public class Coin {
     Rectangle boundingBox;
     Vector2 directionVector;
     int movementSpeed;
-    public static float timeBetweenCoinSpawns = 3f;
+    public static float timeBetweenCoinSpawns = 1f;
     public static float coinSpawnTimer = 0;
 
     TextureRegion coinTexture;
@@ -26,7 +26,7 @@ public class Coin {
         this.height = height;
         this.coinTexture = coinTexture;
         this.boundingBox = new Rectangle(xPosition-width/2,yPosition-height/2,width,height);
-        this.movementSpeed = 50;
+        this.movementSpeed = 200;
 
         directionVector = new Vector2(0, -1);
     }

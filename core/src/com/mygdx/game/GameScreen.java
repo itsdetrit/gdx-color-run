@@ -66,7 +66,7 @@ public class GameScreen implements Screen {
 
         restartButton = itemAtlas.findRegion("restart");
 
-        playerDog = new Dog(230,50,50,WORLD_WIDTH/2,WORLD_HEIGHT/10,dogTextureRegion);
+        playerDog = new Dog(300,50,50,WORLD_WIDTH/2,WORLD_HEIGHT/10,dogTextureRegion);
         spikeList = new LinkedList<>();
         coinList = new LinkedList<>();
 
@@ -82,6 +82,7 @@ public class GameScreen implements Screen {
                 touchPoint = new Vector2(Gdx.input.getX(),Gdx.input.getY());
                 if (restartBounds.contains(touchPoint.x, touchPoint.y)){
                     game.setScreen(new GameScreen(game));
+                    Dog.scores = 0;
                 }
             }
         }
@@ -148,7 +149,7 @@ public class GameScreen implements Screen {
     @Override
     public void resume() {
         backgroundOffSet ++;
-        playerDog.movementSpeed = 230;
+        playerDog.movementSpeed = 300;
         Spike.setSpikeMovementSpeed(spikeList,50);
         Coin.setCoinMovementSpeed(coinList,50);
     }
