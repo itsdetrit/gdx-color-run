@@ -2,8 +2,10 @@ package com.mygdx.game.entitys;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.game.player.Dog;
 
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Random;
 
 public class Spawner {
@@ -39,6 +41,11 @@ public class Spawner {
 
                 @Override
                 public void onTranslate(float xChange, float yChange) {
+
+                }
+
+                @Override
+                public void onDetectCollisions(LinkedList<Entity> entityList, ListIterator<Entity> listIterator, Dog player) {
 
                 }
             });

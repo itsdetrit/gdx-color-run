@@ -11,8 +11,8 @@ import java.util.ListIterator;
 import java.util.Random;
 
 public class Coin extends Entity{
-    public Coin(int xPosition, int yPosition, int width, int height, TextureRegion textureRegion) {
-        super(xPosition, yPosition, width, height, textureRegion);
+    public Coin() {
+        super();
     }
 
     @Override
@@ -25,15 +25,10 @@ public class Coin extends Entity{
 
     }
 
-    public static void detectCollisions(LinkedList<Entity> entityList, Dog player){
-        ListIterator<Entity> entityListIterator = entityList.listIterator();
-        while (entityListIterator.hasNext()){
-            Entity entity = entityListIterator.next();
-            if(player.intersects(entity.getBoundingBox())){
-                player.addScore(1);
-                entityListIterator.remove();
-                break;
-            }
-        }
+    @Override
+    public void onDetectCollisions(LinkedList<Entity> entityList, ListIterator<Entity> listIterator, Dog player) {
+        player.addScore(1);
+        listIterator.remove();
     }
+
 }

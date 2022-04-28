@@ -43,6 +43,8 @@ public class GameScreen implements Screen {
     private BitmapFont font = new BitmapFont();
     private Vector2 touchPoint;
     private RGBDog game;
+    private Coin coin = new Coin();
+    private Spike spike = new Spike();
     private Spawner coinSpawner, spikeSpawner;
 
     public GameScreen(RGBDog game){
@@ -80,8 +82,8 @@ public class GameScreen implements Screen {
         renderBackground();
 
         playerDog.detectInput(deltaTime,WORLD_WIDTH);
-        Spike.detectCollisions(spikeList, playerDog);
-        Coin.detectCollisions(coinList, playerDog);
+        spike.detectCollisions(spikeList, playerDog);
+        coin.detectCollisions(coinList, playerDog);
 
         spikeSpawner.render(deltaTime,spikeList,batch);
         spikeSpawner.spawn(deltaTime,spikeList,WORLD_HEIGHT,spikeTextureRegion);

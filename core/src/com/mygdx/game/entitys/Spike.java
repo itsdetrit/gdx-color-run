@@ -11,8 +11,8 @@ import java.util.ListIterator;
 import java.util.Random;
 
 public class Spike extends Entity{
-    public Spike(int xPosition, int yPosition, int width, int height, TextureRegion spikeTextureRegion) {
-        super(xPosition,yPosition,width,height,spikeTextureRegion);
+    public Spike() {
+        super();
     }
 
     @Override
@@ -25,18 +25,12 @@ public class Spike extends Entity{
 
     }
 
-    public static void detectCollisions(LinkedList<Entity> entityList, Dog player){
-        ListIterator<Entity> entityListIterator = entityList.listIterator();
-        while (entityListIterator.hasNext()){
-            Entity entity = entityListIterator.next();
-            if(player.intersects(entity.getBoundingBox())){
-                player.removeLifePoint(1);
-                entityListIterator.remove();
-                if (player.getLifePoint() == 0){
-                    player.setState(Dog.DOG_OVER);
-                }
-                break;
-            }
+    @Override
+    public void onDetectCollisions(LinkedList<Entity> entityList, ListIterator<Entity> listIterator, Dog player) {
+        player.removeLifePoint(1);
+        listIterator.remove();
+        if (player.getLifePoint() == 0){
+            player.setState(Dog.DOG_OVER);
         }
     }
 

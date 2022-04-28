@@ -4,6 +4,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.player.Dog;
+
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public abstract class Entity {
     protected float xPosition,yPosition;
@@ -24,6 +28,8 @@ public abstract class Entity {
         this.directionVector = new Vector2(0, -1);
     }
 
+    public Entity() {}
+
     public void draw(Batch batch){
         batch.draw(textureRegion,boundingBox.x,boundingBox.y,boundingBox.width,boundingBox.height);
         onDraw(batch);
@@ -34,8 +40,20 @@ public abstract class Entity {
         onTranslate(xChange, yChange);
     }
 
+    public void detectCollisions(LinkedList<Entity> entityList, Dog player){
+        ListIterator<Entity> entityListIterator = entityList.listIterator();
+        while (entityListIterator.hasNext()){
+            Entity entity = entityListIterator.next();
+            if(player.intersects(entity.getBoundingBox())){
+                onDetectCollisions(entityList,entityListIterator, player);
+                break;
+            }
+        }
+    }
+
     public abstract void onDraw(Batch batch);
     public abstract void onTranslate(float xChange, float yChange);
+    public abstract void onDetectCollisions(LinkedList<Entity> entityList, ListIterator<Entity> listIterator, Dog player);
     public Rectangle getBoundingBox() {
         return boundingBox;
     }
