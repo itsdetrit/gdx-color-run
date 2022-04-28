@@ -1,6 +1,7 @@
 package com.mygdx.game.entitys;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.player.Dog;
 
 public class Coin extends Entity{
@@ -14,8 +15,12 @@ public class Coin extends Entity{
     }
 
     @Override
-    public void onDetectCollisions(Dog player) {
-        player.addScore(1);
+    public void onDetectCollisions(Dog player, int id) {
+        if(player.getColor() == id){
+            player.addScore(1);
+        } else {
+            player.removeScore(1);
+        }
     }
 
 }

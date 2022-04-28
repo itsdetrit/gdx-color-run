@@ -14,6 +14,7 @@ public class Spawner {
     private int width,height;
     private LinkedList<Entity> entities;
     private TextureRegion entityTextureRegion;
+    private TextureRegion[] textureRegionList;
 
     public Spawner(float spawnTimer, float timeBetweenSpawns, int width, int height, TextureRegion entityTextureRegion) {
         this.spawnTimer = spawnTimer;
@@ -21,6 +22,16 @@ public class Spawner {
         this.width = width;
         this.height = height;
         this.entityTextureRegion = entityTextureRegion;
+        entities = new LinkedList<>();
+    }
+
+    public Spawner(float spawnTimer, float timeBetweenSpawns, int width, int height, TextureRegion defaultTextureRegion, TextureRegion[] textureRegionList) {
+        this.spawnTimer = spawnTimer;
+        this.timeBetweenSpawns = timeBetweenSpawns;
+        this.width = width;
+        this.height = height;
+        this.entityTextureRegion = defaultTextureRegion;
+        this.textureRegionList = textureRegionList;
         entities = new LinkedList<>();
     }
 
@@ -36,17 +47,32 @@ public class Spawner {
         Random random = new Random();
 
         if (spawnTimer > timeBetweenSpawns){
-            entities.add(new Entity(random.nextInt(361) + 220, WORLD_HEIGHT - 10, width, height, entityTextureRegion) {
-                @Override
-                public void onDraw(Batch batch) {
+            if (textureRegionList == null){
+                entities.add(new Entity(random.nextInt(361) + 220, WORLD_HEIGHT - 10, width, height, entityTextureRegion) {
+                    @Override
+                    public void onDraw(Batch batch) {
 
-                }
+                    }
 
-                @Override
-                public void onDetectCollisions(Dog player) {
+                    @Override
+                    public void onDetectCollisions(Dog player, int id) {
 
-                }
-            });
+                    }
+                });
+            } else {
+                int id = random.nextInt(3);
+                entities.add(new Entity(random.nextInt(361) + 220, WORLD_HEIGHT - 10, width, height
+                        , textureRegionList[id],id) {
+                    @Override
+                    public void onDraw(Batch batch) {
+
+                    }
+
+                    @Override
+                    public void onDetectCollisions(Dog player, int id) {
+                    }
+                });
+            }
             spawnTimer -= timeBetweenSpawns;
         }
     }

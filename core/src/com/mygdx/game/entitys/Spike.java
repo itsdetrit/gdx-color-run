@@ -14,7 +14,7 @@ public class Spike extends Entity{
     }
 
     @Override
-    public void onDetectCollisions(Dog player) {
+    public void onDetectCollisions(Dog player, int id) {
         player.removeLifePoint(1);
         if (player.getLifePoint() == 0){
             player.setState(Dog.DOG_OVER);

@@ -12,10 +12,18 @@ public abstract class Entity {
     private Rectangle boundingBox;
     private int movementSpeed = 200;
     private TextureRegion textureRegion;
+    private int id;
 
     public Entity(int xPosition, int yPosition, int width, int height, TextureRegion textureRegion) {
         this.textureRegion = textureRegion;
         this.boundingBox = new Rectangle(xPosition-width/2,yPosition-height/2,width,height);
+        this.id = 0;
+    }
+
+    public Entity(int xPosition, int yPosition, int width, int height, TextureRegion textureRegion, int id) {
+        this.textureRegion = textureRegion;
+        this.boundingBox = new Rectangle(xPosition-width/2,yPosition-height/2,width,height);
+        this.id = id;
     }
 
     public Entity() {}
@@ -34,7 +42,7 @@ public abstract class Entity {
         while (entityListIterator.hasNext()){
             Entity entity = entityListIterator.next();
             if(player.intersects(entity.getBoundingBox())){
-                onDetectCollisions(player);
+                onDetectCollisions(player, entity.id);
                 entityListIterator.remove();
                 break;
             }
@@ -42,7 +50,7 @@ public abstract class Entity {
     }
 
     public abstract void onDraw(Batch batch);
-    public abstract void onDetectCollisions(Dog player);
+    public abstract void onDetectCollisions(Dog player, int id);
 
     public Rectangle getBoundingBox() {
         return boundingBox;

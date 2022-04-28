@@ -24,7 +24,7 @@ public class MainMenuScreen extends ScreenAdapter {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
 
-        font.setColor(1,0,0,1);
+        font.setColor(1,1,1,1);
         font.getData().setScale(3f);
         font.draw(game.batch, "Tap screen to begin",300,400);
         game.batch.end();

@@ -18,6 +18,8 @@ import com.mygdx.game.entitys.Spawner;
 import com.mygdx.game.player.Dog;
 import com.mygdx.game.entitys.Spike;
 
+import java.util.Random;
+
 public class GameScreen implements Screen {
     private Camera camera;
     private Viewport viewport;
@@ -28,13 +30,15 @@ public class GameScreen implements Screen {
 
     private TextureAtlas textureAtlas,itemAtlas;
     private TextureRegion background;
-    private TextureRegion dogTextureRegion,coinTextureRegion,spikeTextureRegion;
+    private TextureRegion redDogTextureRegion,greenDogTextureRegion,blueDogTextureRegion
+            ,redCoinTextureRegion,greenCoinTextureRegion,blueCoinTextureRegion,coinTextureRegion
+            ,spikeTextureRegion;
     private TextureRegion restartButton;
 
     private Dog playerDog;
     private Coin coinDetector = new Coin();
     private Spike spikeDetector = new Spike();
-    private Spawner coinSpawner, spikeSpawner;
+    private Spawner coinSpawner,spikeSpawner;
 
     private BitmapFont font = new BitmapFont();
     private Vector2 touchPoint;
@@ -42,6 +46,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(RGBDog game){
         this.game = game;
+        Random random = new Random();
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH,WORLD_HEIGHT,camera);
         textureAtlas = new TextureAtlas("image.atlas");
@@ -49,13 +54,35 @@ public class GameScreen implements Screen {
         background = textureAtlas.findRegion("road2");
         backgroundOffSet = 0;
 
-        dogTextureRegion = textureAtlas.findRegion("dog");
+        redDogTextureRegion = textureAtlas.findRegion("reddog");
+        greenDogTextureRegion = textureAtlas.findRegion("greendog");
+        blueDogTextureRegion = textureAtlas.findRegion("bluedog");
+
         coinTextureRegion = textureAtlas.findRegion("coin");
+        redCoinTextureRegion = textureAtlas.findRegion("redcoin");
+        greenCoinTextureRegion = textureAtlas.findRegion("greencoin");
+        blueCoinTextureRegion = textureAtlas.findRegion("bluecoin");
+
         spikeTextureRegion = textureAtlas.findRegion("spike");
         restartButton = itemAtlas.findRegion("restart");
 
-        playerDog = new Dog(300,50,50,WORLD_WIDTH/2,WORLD_HEIGHT/10,dogTextureRegion);
-        coinSpawner = new Spawner(0,1f,30,30,coinTextureRegion);
+        TextureRegion[] dogList = {
+                redDogTextureRegion,
+                greenDogTextureRegion,
+                blueDogTextureRegion
+        };
+
+        TextureRegion[] coinList = {
+                redCoinTextureRegion,
+                greenCoinTextureRegion,
+                blueCoinTextureRegion
+        };
+
+        int randomDogColor = random.nextInt(3);
+
+        playerDog = new Dog(300,50,50,WORLD_WIDTH/2,WORLD_HEIGHT/10
+                ,dogList[randomDogColor], randomDogColor);
+        coinSpawner = new Spawner(0,1f,30,30,coinTextureRegion,coinList);
         spikeSpawner = new Spawner(0,1f,100,30,spikeTextureRegion);
 
         batch = new SpriteBatch();
@@ -83,13 +110,11 @@ public class GameScreen implements Screen {
         font.setColor(new Color(0,1,0,1));
         font.getData().setScale(1.5f,1.5f);
         font.draw(batch,"HP :  "+ playerDog.getLifePoint(),20,550);
-
-        font.setColor(new Color(0,1,0,1));
-        font.getData().setScale(1.5f,1.5f);
         font.draw(batch,"Scores :  "+ playerDog.getScores(),20,520);
+        font.draw(batch,"Color : "+playerDog.getColorText()+" ( id : "+playerDog.getColor()+")",20,490);
 
         playerDog.draw(batch);
-        presentGameOver();
+        renderGameOver();
 
         batch.end();
     }
@@ -105,8 +130,9 @@ public class GameScreen implements Screen {
         backgroundOffSet = 0;
         playerDog.setMovementSpeed(0);
         spikeSpawner.setMovementSpeed(0);
-        coinSpawner.setMovementSpeed(0);
         spikeSpawner.setSpawnTimer(0);
+
+        coinSpawner.setMovementSpeed(0);
         coinSpawner.setSpawnTimer(0);
     }
 
@@ -115,6 +141,7 @@ public class GameScreen implements Screen {
         backgroundOffSet ++;
         playerDog.setMovementSpeed(300);
         spikeSpawner.setMovementSpeed(50);
+
         coinSpawner.setMovementSpeed(50);
     }
 
@@ -128,7 +155,7 @@ public class GameScreen implements Screen {
 
     }
 
-    private void presentGameOver(){
+    private void renderGameOver(){
         if (playerDog.getState() == Dog.DOG_OVER) {
             pause();
             Rectangle restartBounds = new Rectangle(200,250,restartButton.getRegionWidth(),restartButton.getRegionHeight());
