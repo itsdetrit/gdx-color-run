@@ -8,40 +8,22 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.LinkedList;
 import java.util.Random;
 
-public class Spike {
-
-    private float xPosition,yPosition;
-    private float width,height;
-    private Rectangle boundingBox;
-    private Vector2 directionVector;
-    private int movementSpeed;
+public class Spike extends Entity{
     public static float spikeSpawnTimer = 0;
     public static float timeBetweenSpikeSpawns = 1f;
 
-    TextureRegion spikeTexture;
-
-    public Spike(float width, float height,float xPosition, float yPosition,TextureRegion spikeTexture) {
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
-        this.width = width;
-        this.height = height;
-        this.spikeTexture = spikeTexture;
-        this.boundingBox = new Rectangle(xPosition-width/2,yPosition-height/2,width,height);
-        this.movementSpeed = 200;
-
-        directionVector = new Vector2(0, -1);
+    public Spike(int xPosition, int yPosition, int width, int height, TextureRegion spikeTextureRegion) {
+        super(xPosition,yPosition,width,height,spikeTextureRegion);
     }
 
+    @Override
     public void draw(Batch batch){
-        batch.draw(spikeTexture,boundingBox.x,boundingBox.y,boundingBox.width,boundingBox.height);
+        batch.draw(super.getTextureRegion(),boundingBox.x,boundingBox.y,boundingBox.width,boundingBox.height);
     }
 
+    @Override
     public void translate(float xChange,float yChange){
         boundingBox.setPosition(boundingBox.x+xChange, boundingBox.y+yChange);
-    }
-
-    public Vector2 getDirectionVector() {
-        return directionVector;
     }
 
     public static void renderSpike(float delta, LinkedList<Spike> spikeList,Batch batch){
@@ -51,28 +33,23 @@ public class Spike {
         }
     }
 
-    private static void moveSpike(Spike spike, float deltaTime){
-        float yMove = spike.getDirectionVector().y * spike.movementSpeed * deltaTime;
-        spike.translate(0,-spike.movementSpeed*deltaTime);
-    }
-
     public static void spawnSpike(float deltaTime,LinkedList<Spike> spikeList,int WORLD_HEIGHT, TextureRegion spikeTextureRegion){
         spikeSpawnTimer += deltaTime;
         Random random = new Random();
 
         if (spikeSpawnTimer > timeBetweenSpikeSpawns){
-            spikeList.add(new Spike(100,30,random.nextInt(361)+220,WORLD_HEIGHT-10,spikeTextureRegion));
+            spikeList.add(new Spike(random.nextInt(361)+220,WORLD_HEIGHT-10,100,30,spikeTextureRegion));
             spikeSpawnTimer -= timeBetweenSpikeSpawns;
         }
+    }
+
+    private static void moveSpike(Spike spike, float deltaTime){
+        spike.translate(0,-spike.movementSpeed*deltaTime);
     }
 
     public static void setSpikeMovementSpeed(LinkedList<Spike> spikeList,int movementSpeed){
         for (Spike spike : spikeList){
             spike.movementSpeed = movementSpeed;
         }
-    }
-
-    public Rectangle getBoundingBox() {
-        return boundingBox;
     }
 }

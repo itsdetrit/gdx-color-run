@@ -8,39 +8,22 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.LinkedList;
 import java.util.Random;
 
-public class Coin {
-    private float xPosition,yPosition;
-    private float width,height;
-    private Rectangle boundingBox;
-    private Vector2 directionVector;
-    private int movementSpeed;
-    public static float timeBetweenCoinSpawns = 1f;
+public class Coin extends Entity{
     public static float coinSpawnTimer = 0;
+    public static float timeBetweenCoinSpawns = 1f;
 
-    TextureRegion coinTexture;
-
-    public Coin(float width, float height, float xPosition, float yPosition, TextureRegion coinTexture) {
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
-        this.width = width;
-        this.height = height;
-        this.coinTexture = coinTexture;
-        this.boundingBox = new Rectangle(xPosition-width/2,yPosition-height/2,width,height);
-        this.movementSpeed = 200;
-
-        directionVector = new Vector2(0, -1);
+    public Coin(int xPosition, int yPosition, int width, int height, TextureRegion textureRegion) {
+        super(xPosition, yPosition, width, height, textureRegion);
     }
 
+    @Override
     public void draw(Batch batch){
-        batch.draw(coinTexture,boundingBox.x,boundingBox.y,boundingBox.width,boundingBox.height);
+        batch.draw(super.getTextureRegion(),boundingBox.x,boundingBox.y,boundingBox.width,boundingBox.height);
     }
 
+    @Override
     public void translate(float xChange,float yChange){
         boundingBox.setPosition(boundingBox.x+xChange, boundingBox.y+yChange);
-    }
-
-    public Vector2 getDirectionVector() {
-        return directionVector;
     }
 
     public static void renderCoin(float delta, LinkedList<Coin> coinList,Batch batch){
@@ -55,13 +38,12 @@ public class Coin {
         Random random = new Random();
 
         if (coinSpawnTimer > timeBetweenCoinSpawns){
-            coinList.add(new Coin(30,30, random.nextInt(361)+220,WORLD_HEIGHT-10,coinTextureRegion ));
+            coinList.add(new Coin(random.nextInt(361)+220,WORLD_HEIGHT-10, 30,30,coinTextureRegion ));
             coinSpawnTimer -= timeBetweenCoinSpawns;
         }
     }
 
     private static void moveCoin(Coin coin, float deltaTime){
-        float yMove = coin.getDirectionVector().y * coin.movementSpeed * deltaTime;
         coin.translate(0,-coin.movementSpeed*deltaTime);
     }
 
@@ -69,9 +51,5 @@ public class Coin {
         for (Coin coin : coinList){
             coin.movementSpeed = movementSpeed;
         }
-    }
-
-    public Rectangle getBoundingBox() {
-        return boundingBox;
     }
 }

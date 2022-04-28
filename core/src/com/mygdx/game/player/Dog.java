@@ -1,10 +1,12 @@
-package com.mygdx.game.entitys;
+package com.mygdx.game.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.entitys.Coin;
+import com.mygdx.game.entitys.Spike;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -14,15 +16,13 @@ public class Dog {
     private int lifePoint;
     private int scores;
     private int state;
+    private Rectangle boundingBox;
+    private float xPosition,yPosition;
+    private float width,height;
+    private TextureRegion dogTexture;
+
     public static final int DOG_RUNNING = 0;
     public static final int DOG_OVER = 1;
-
-    Rectangle boundingBox;
-
-    float xPosition,yPosition;
-    float width,height;
-
-    TextureRegion dogTexture;
 
     public Dog(float movementSpeed,float width, float height,
                float xCentre, float yCentre,TextureRegion dogTexture) {
@@ -88,10 +88,6 @@ public class Dog {
                 break;
             }
         }
-    }
-
-    public float getMovementSpeed() {
-        return movementSpeed;
     }
 
     public void setMovementSpeed(float movementSpeed) {

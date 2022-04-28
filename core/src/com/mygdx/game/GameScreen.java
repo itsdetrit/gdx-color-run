@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.entitys.Coin;
-import com.mygdx.game.entitys.Dog;
+import com.mygdx.game.player.Dog;
 import com.mygdx.game.entitys.Spike;
 
 import java.util.LinkedList;
@@ -37,19 +37,12 @@ public class GameScreen implements Screen {
     private Dog playerDog;
     private LinkedList<Spike> spikeList;
     private LinkedList<Coin> coinList;
+
     private BitmapFont font = new BitmapFont();
-
-    static final int GAME_READY = 0;
-    static final int GAME_RUNNING = 1;
-    static final int GAME_PAUSED = 2;
-    static final int GAME_OVER = 3;
-    private int state;
-
-    Vector2 touchPoint;
-    RGBDog game;
+    private Vector2 touchPoint;
+    private RGBDog game;
 
     public GameScreen(RGBDog game){
-        state = GAME_RUNNING;
         this.game = game;
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH,WORLD_HEIGHT,camera);
@@ -71,21 +64,6 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
     }
 
-    private void presentGameOver(){
-        if (playerDog.getState() == Dog.DOG_OVER) {
-            pause();
-            Rectangle restartBounds = new Rectangle(200,200,restartButton.getRegionWidth(),restartButton.getRegionHeight());
-            batch.draw(restartButton,200,200);
-            if (Gdx.input.justTouched()){
-                touchPoint = new Vector2(Gdx.input.getX(),Gdx.input.getY());
-                if (restartBounds.contains(touchPoint.x, touchPoint.y)){
-                    game.setScreen(new GameScreen(game));
-                    playerDog.setScores(0);
-                }
-            }
-        }
-    }
-
     @Override
     public void show() {
 
@@ -94,7 +72,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float deltaTime) {
         batch.begin();
-        renderBackground(deltaTime);
+        renderBackground();
 
         playerDog.detectInput(deltaTime,WORLD_WIDTH);
         playerDog.detectSpikeCollisions(spikeList);
@@ -118,8 +96,22 @@ public class GameScreen implements Screen {
 
         batch.end();
     }
+    private void presentGameOver(){
+        if (playerDog.getState() == Dog.DOG_OVER) {
+            pause();
+            Rectangle restartBounds = new Rectangle(200,250,restartButton.getRegionWidth(),restartButton.getRegionHeight());
+            batch.draw(restartButton,200,250);
+            if (Gdx.input.justTouched()){
+                touchPoint = new Vector2(Gdx.input.getX(),Gdx.input.getY());
+                if (restartBounds.contains(touchPoint.x, touchPoint.y)){
+                    game.setScreen(new GameScreen(game));
+                    playerDog.setScores(0);
+                }
+            }
+        }
+    }
 
-    public void renderBackground(float delta){
+    public void renderBackground(){
         backgroundOffSet += 2;
         if (backgroundOffSet % WORLD_HEIGHT == 0){
             backgroundOffSet = 0;
