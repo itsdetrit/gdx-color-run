@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.entitys.Coin;
+import com.mygdx.game.entitys.Entity;
 import com.mygdx.game.entitys.Spike;
 
 import java.util.LinkedList;
@@ -63,33 +64,6 @@ public class Dog {
         }
     }
 
-    public void detectSpikeCollisions(LinkedList<Spike> spikeList){
-        ListIterator<Spike> spikeListIterator = spikeList.listIterator();
-        while (spikeListIterator.hasNext()){
-            Spike spike = spikeListIterator.next();
-            if(this.intersects(spike.getBoundingBox())){
-                this.lifePoint -= 1;
-                spikeListIterator.remove();
-                if (this.lifePoint == 0){
-                    this.state = DOG_OVER;
-                }
-                break;
-            }
-        }
-    }
-
-    public void detectCoinCollisions(LinkedList<Coin> coinList){
-        ListIterator<Coin> coinListIterator = coinList.listIterator();
-        while (coinListIterator.hasNext()){
-            Coin coin = coinListIterator.next();
-            if(this.intersects(coin.getBoundingBox())){
-                this.scores += 1;
-                coinListIterator.remove();
-                break;
-            }
-        }
-    }
-
     public void setMovementSpeed(float movementSpeed) {
         this.movementSpeed = movementSpeed;
     }
@@ -108,5 +82,17 @@ public class Dog {
 
     public int getScores() {
         return scores;
+    }
+
+    public void addScore(int score){
+        this.scores += score;
+    }
+
+    public void removeLifePoint(int lifePoint){
+        this.lifePoint -= lifePoint;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 }

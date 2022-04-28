@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-abstract class Entity {
+public abstract class Entity {
     protected float xPosition,yPosition;
     protected float width,height;
     protected Rectangle boundingBox;
@@ -36,7 +36,6 @@ abstract class Entity {
 
     public abstract void onDraw(Batch batch);
     public abstract void onTranslate(float xChange, float yChange);
-
     public Rectangle getBoundingBox() {
         return boundingBox;
     }

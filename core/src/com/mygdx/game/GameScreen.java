@@ -14,8 +14,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.entitys.Coin;
+import com.mygdx.game.entitys.Spawner;
 import com.mygdx.game.player.Dog;
 import com.mygdx.game.entitys.Spike;
+import com.mygdx.game.entitys.Entity;
 
 import java.util.LinkedList;
 
@@ -35,12 +37,13 @@ public class GameScreen implements Screen {
     private final int WORLD_HEIGHT = 600;
 
     private Dog playerDog;
-    private LinkedList<Spike> spikeList;
-    private LinkedList<Coin> coinList;
+    private LinkedList<Entity> spikeList;
+    private LinkedList<Entity> coinList;
 
     private BitmapFont font = new BitmapFont();
     private Vector2 touchPoint;
     private RGBDog game;
+    private Spawner coinSpawner, spikeSpawner;
 
     public GameScreen(RGBDog game){
         this.game = game;
@@ -58,6 +61,8 @@ public class GameScreen implements Screen {
         restartButton = itemAtlas.findRegion("restart");
 
         playerDog = new Dog(300,50,50,WORLD_WIDTH/2,WORLD_HEIGHT/10,dogTextureRegion);
+        coinSpawner = new Spawner(0,1f,30,30);
+        spikeSpawner = new Spawner(0,1f,100,30);
         spikeList = new LinkedList<>();
         coinList = new LinkedList<>();
 
@@ -75,13 +80,13 @@ public class GameScreen implements Screen {
         renderBackground();
 
         playerDog.detectInput(deltaTime,WORLD_WIDTH);
-        playerDog.detectSpikeCollisions(spikeList);
-        playerDog.detectCoinCollisions(coinList);
+        Spike.detectCollisions(spikeList, playerDog);
+        Coin.detectCollisions(coinList, playerDog);
 
-        Spike.renderSpike(deltaTime,spikeList,batch);
-        Spike.spawnSpike(deltaTime,spikeList,WORLD_HEIGHT,spikeTextureRegion);
-        Coin.renderCoin(deltaTime,coinList,batch);
-        Coin.spawnCoin(deltaTime,coinList,WORLD_HEIGHT,coinTextureRegion);
+        spikeSpawner.render(deltaTime,spikeList,batch);
+        spikeSpawner.spawn(deltaTime,spikeList,WORLD_HEIGHT,spikeTextureRegion);
+        coinSpawner.render(deltaTime,coinList,batch);
+        coinSpawner.spawn(deltaTime,coinList,WORLD_HEIGHT,coinTextureRegion);
 
         font.setColor(new Color(0,1,0,1));
         font.getData().setScale(1.5f,1.5f);
@@ -130,18 +135,18 @@ public class GameScreen implements Screen {
     public void pause() {
         backgroundOffSet = 0;
         playerDog.setMovementSpeed(0);
-        Spike.setSpikeMovementSpeed(spikeList,0);
-        Coin.setCoinMovementSpeed(coinList,0);
-        Spike.spikeSpawnTimer = 0;
-        Coin.coinSpawnTimer = 0;
+        spikeSpawner.setMovementSpeed(spikeList,0);
+        coinSpawner.setMovementSpeed(coinList,0);
+        spikeSpawner.setSpawnTimer(0);
+        coinSpawner.setSpawnTimer(0);
     }
 
     @Override
     public void resume() {
         backgroundOffSet ++;
         playerDog.setMovementSpeed(300);
-        Spike.setSpikeMovementSpeed(spikeList,50);
-        Coin.setCoinMovementSpeed(coinList,50);
+        spikeSpawner.setMovementSpeed(spikeList,50);
+        coinSpawner.setMovementSpeed(coinList,50);
     }
 
     @Override
