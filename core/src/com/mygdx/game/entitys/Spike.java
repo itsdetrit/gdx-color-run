@@ -21,14 +21,8 @@ public class Spike extends Entity{
     }
 
     @Override
-    public void onTranslate(float xChange, float yChange) {
-
-    }
-
-    @Override
-    public void onDetectCollisions(LinkedList<Entity> entityList, ListIterator<Entity> listIterator, Dog player) {
+    public void onDetectCollisions(Dog player) {
         player.removeLifePoint(1);
-        listIterator.remove();
         if (player.getLifePoint() == 0){
             player.setState(Dog.DOG_OVER);
         }

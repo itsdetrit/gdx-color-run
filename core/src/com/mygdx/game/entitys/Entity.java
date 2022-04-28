@@ -37,7 +37,6 @@ public abstract class Entity {
 
     public void translate(float xChange, float yChange){
         boundingBox.setPosition(boundingBox.x+xChange, boundingBox.y+yChange);
-        onTranslate(xChange, yChange);
     }
 
     public void detectCollisions(LinkedList<Entity> entityList, Dog player){
@@ -45,15 +44,15 @@ public abstract class Entity {
         while (entityListIterator.hasNext()){
             Entity entity = entityListIterator.next();
             if(player.intersects(entity.getBoundingBox())){
-                onDetectCollisions(entityList,entityListIterator, player);
+                onDetectCollisions(player);
+                entityListIterator.remove();
                 break;
             }
         }
     }
 
     public abstract void onDraw(Batch batch);
-    public abstract void onTranslate(float xChange, float yChange);
-    public abstract void onDetectCollisions(LinkedList<Entity> entityList, ListIterator<Entity> listIterator, Dog player);
+    public abstract void onDetectCollisions(Dog player);
     public Rectangle getBoundingBox() {
         return boundingBox;
     }

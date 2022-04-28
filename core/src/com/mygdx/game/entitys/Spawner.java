@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.player.Dog;
 
 import java.util.LinkedList;
-import java.util.ListIterator;
 import java.util.Random;
 
 public class Spawner {
@@ -13,39 +12,38 @@ public class Spawner {
     private float spawnTimer = 0;
     private float timeBetweenSpawns = 1f;
     private int width,height;
+    private LinkedList<Entity> entities;
+    private TextureRegion entityTextureRegion;
 
-    public Spawner(float spawnTimer, float timeBetweenSpawns, int width, int height) {
+    public Spawner(float spawnTimer, float timeBetweenSpawns, int width, int height, TextureRegion entityTextureRegion) {
         this.spawnTimer = spawnTimer;
         this.timeBetweenSpawns = timeBetweenSpawns;
         this.width = width;
         this.height = height;
+        this.entityTextureRegion = entityTextureRegion;
+        entities = new LinkedList<>();
     }
 
-    public void render(float delta, LinkedList<Entity> entityList, Batch batch){
-        for (Entity entity : entityList){
+    public void render(float delta, Batch batch){
+        for (Entity entity : entities){
             move(entity,delta);
             entity.draw(batch);
         }
     }
 
-    public void spawn(float deltaTime, LinkedList<Entity> entityList, int WORLD_HEIGHT, TextureRegion entityTextureRegion){
+    public void spawn(float deltaTime,int WORLD_HEIGHT){
         spawnTimer += deltaTime;
         Random random = new Random();
 
         if (spawnTimer > timeBetweenSpawns){
-            entityList.add(new Entity(random.nextInt(361) + 220, WORLD_HEIGHT - 10, width, height, entityTextureRegion) {
+            entities.add(new Entity(random.nextInt(361) + 220, WORLD_HEIGHT - 10, width, height, entityTextureRegion) {
                 @Override
                 public void onDraw(Batch batch) {
 
                 }
 
                 @Override
-                public void onTranslate(float xChange, float yChange) {
-
-                }
-
-                @Override
-                public void onDetectCollisions(LinkedList<Entity> entityList, ListIterator<Entity> listIterator, Dog player) {
+                public void onDetectCollisions(Dog player) {
 
                 }
             });
@@ -57,13 +55,17 @@ public class Spawner {
         entity.translate(0,-entity.movementSpeed*deltaTime);
     }
 
-    public void setMovementSpeed(LinkedList<Entity> entityList,int movementSpeed){
-        for (Entity entity : entityList){
+    public void setMovementSpeed(int movementSpeed){
+        for (Entity entity : entities){
             entity.movementSpeed = movementSpeed;
         }
     }
 
     public void setSpawnTimer(float spawnTimer) {
         this.spawnTimer = spawnTimer;
+    }
+
+    public LinkedList<Entity> getEntities() {
+        return entities;
     }
 }

@@ -17,35 +17,28 @@ import com.mygdx.game.entitys.Coin;
 import com.mygdx.game.entitys.Spawner;
 import com.mygdx.game.player.Dog;
 import com.mygdx.game.entitys.Spike;
-import com.mygdx.game.entitys.Entity;
-
-import java.util.LinkedList;
 
 public class GameScreen implements Screen {
-
     private Camera camera;
     private Viewport viewport;
     private SpriteBatch batch;
+    private final int WORLD_WIDTH = 800;
+    private final int WORLD_HEIGHT = 600;
+    private int backgroundOffSet;
+
     private TextureAtlas textureAtlas,itemAtlas;
     private TextureRegion background;
     private TextureRegion dogTextureRegion,coinTextureRegion,spikeTextureRegion;
     private TextureRegion restartButton;
 
-    private int backgroundOffSet;
-
-    private final int WORLD_WIDTH = 800;
-    private final int WORLD_HEIGHT = 600;
-
     private Dog playerDog;
-    private LinkedList<Entity> spikeList;
-    private LinkedList<Entity> coinList;
+    private Coin coinDetector = new Coin();
+    private Spike spikeDetector = new Spike();
+    private Spawner coinSpawner, spikeSpawner;
 
     private BitmapFont font = new BitmapFont();
     private Vector2 touchPoint;
     private RGBDog game;
-    private Coin coin = new Coin();
-    private Spike spike = new Spike();
-    private Spawner coinSpawner, spikeSpawner;
 
     public GameScreen(RGBDog game){
         this.game = game;
@@ -59,14 +52,11 @@ public class GameScreen implements Screen {
         dogTextureRegion = textureAtlas.findRegion("dog");
         coinTextureRegion = textureAtlas.findRegion("coin");
         spikeTextureRegion = textureAtlas.findRegion("spike");
-
         restartButton = itemAtlas.findRegion("restart");
 
         playerDog = new Dog(300,50,50,WORLD_WIDTH/2,WORLD_HEIGHT/10,dogTextureRegion);
-        coinSpawner = new Spawner(0,1f,30,30);
-        spikeSpawner = new Spawner(0,1f,100,30);
-        spikeList = new LinkedList<>();
-        coinList = new LinkedList<>();
+        coinSpawner = new Spawner(0,1f,30,30,coinTextureRegion);
+        spikeSpawner = new Spawner(0,1f,100,30,spikeTextureRegion);
 
         batch = new SpriteBatch();
     }
@@ -82,13 +72,13 @@ public class GameScreen implements Screen {
         renderBackground();
 
         playerDog.detectInput(deltaTime,WORLD_WIDTH);
-        spike.detectCollisions(spikeList, playerDog);
-        coin.detectCollisions(coinList, playerDog);
+        spikeDetector.detectCollisions(spikeSpawner.getEntities(), playerDog);
+        coinDetector.detectCollisions(coinSpawner.getEntities(), playerDog);
 
-        spikeSpawner.render(deltaTime,spikeList,batch);
-        spikeSpawner.spawn(deltaTime,spikeList,WORLD_HEIGHT,spikeTextureRegion);
-        coinSpawner.render(deltaTime,coinList,batch);
-        coinSpawner.spawn(deltaTime,coinList,WORLD_HEIGHT,coinTextureRegion);
+        spikeSpawner.render(deltaTime,batch);
+        spikeSpawner.spawn(deltaTime,WORLD_HEIGHT);
+        coinSpawner.render(deltaTime,batch);
+        coinSpawner.spawn(deltaTime,WORLD_HEIGHT);
 
         font.setColor(new Color(0,1,0,1));
         font.getData().setScale(1.5f,1.5f);
@@ -103,6 +93,41 @@ public class GameScreen implements Screen {
 
         batch.end();
     }
+
+    @Override
+    public void resize(int width, int height) {
+        viewport.update(width,height,true);
+        batch.setProjectionMatrix(camera.combined);
+    }
+
+    @Override
+    public void pause() {
+        backgroundOffSet = 0;
+        playerDog.setMovementSpeed(0);
+        spikeSpawner.setMovementSpeed(0);
+        coinSpawner.setMovementSpeed(0);
+        spikeSpawner.setSpawnTimer(0);
+        coinSpawner.setSpawnTimer(0);
+    }
+
+    @Override
+    public void resume() {
+        backgroundOffSet ++;
+        playerDog.setMovementSpeed(300);
+        spikeSpawner.setMovementSpeed(50);
+        coinSpawner.setMovementSpeed(50);
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
+    }
+
     private void presentGameOver(){
         if (playerDog.getState() == Dog.DOG_OVER) {
             pause();
@@ -125,39 +150,5 @@ public class GameScreen implements Screen {
         }
         batch.draw(background,0,-backgroundOffSet,WORLD_WIDTH,WORLD_HEIGHT);
         batch.draw(background,0,-backgroundOffSet+WORLD_HEIGHT,WORLD_WIDTH,WORLD_HEIGHT);
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        viewport.update(width,height,true);
-        batch.setProjectionMatrix(camera.combined);
-    }
-
-    @Override
-    public void pause() {
-        backgroundOffSet = 0;
-        playerDog.setMovementSpeed(0);
-        spikeSpawner.setMovementSpeed(spikeList,0);
-        coinSpawner.setMovementSpeed(coinList,0);
-        spikeSpawner.setSpawnTimer(0);
-        coinSpawner.setSpawnTimer(0);
-    }
-
-    @Override
-    public void resume() {
-        backgroundOffSet ++;
-        playerDog.setMovementSpeed(300);
-        spikeSpawner.setMovementSpeed(spikeList,50);
-        coinSpawner.setMovementSpeed(coinList,50);
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

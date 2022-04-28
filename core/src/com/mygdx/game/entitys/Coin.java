@@ -21,14 +21,8 @@ public class Coin extends Entity{
     }
 
     @Override
-    public void onTranslate(float xChange, float yChange) {
-
-    }
-
-    @Override
-    public void onDetectCollisions(LinkedList<Entity> entityList, ListIterator<Entity> listIterator, Dog player) {
+    public void onDetectCollisions(Dog player) {
         player.addScore(1);
-        listIterator.remove();
     }
 
 }
