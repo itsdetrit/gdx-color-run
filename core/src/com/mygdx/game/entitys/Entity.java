@@ -24,13 +24,20 @@ abstract class Entity {
         this.directionVector = new Vector2(0, -1);
     }
 
-    public abstract void draw(Batch batch);
-    public abstract void translate(float xChange, float yChange);
+    public void draw(Batch batch){
+        batch.draw(textureRegion,boundingBox.x,boundingBox.y,boundingBox.width,boundingBox.height);
+        onDraw(batch);
+    };
+
+    public void translate(float xChange, float yChange){
+        boundingBox.setPosition(boundingBox.x+xChange, boundingBox.y+yChange);
+        onTranslate(xChange, yChange);
+    }
+
+    public abstract void onDraw(Batch batch);
+    public abstract void onTranslate(float xChange, float yChange);
 
     public Rectangle getBoundingBox() {
         return boundingBox;
-    }
-    public TextureRegion getTextureRegion() {
-        return textureRegion;
     }
 }

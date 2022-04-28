@@ -17,14 +17,15 @@ public class Spike extends Entity{
     }
 
     @Override
-    public void draw(Batch batch){
-        batch.draw(super.getTextureRegion(),boundingBox.x,boundingBox.y,boundingBox.width,boundingBox.height);
+    public void onDraw(Batch batch) {
+
     }
 
     @Override
-    public void translate(float xChange,float yChange){
-        boundingBox.setPosition(boundingBox.x+xChange, boundingBox.y+yChange);
+    public void onTranslate(float xChange, float yChange) {
+
     }
+
 
     public static void renderSpike(float delta, LinkedList<Spike> spikeList,Batch batch){
         for (Spike spike : spikeList) {
