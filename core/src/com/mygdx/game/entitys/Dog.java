@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.entitys;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -6,17 +6,16 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
-import java.awt.*;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
 public class Dog {
-    float movementSpeed;
-    public static int lifePoint;
-    public static int scores;
+    private float movementSpeed;
+    private int lifePoint;
+    private int scores;
+    private int state;
     public static final int DOG_RUNNING = 0;
     public static final int DOG_OVER = 1;
-    public int state;
 
     Rectangle boundingBox;
 
@@ -68,10 +67,10 @@ public class Dog {
         ListIterator<Spike> spikeListIterator = spikeList.listIterator();
         while (spikeListIterator.hasNext()){
             Spike spike = spikeListIterator.next();
-            if(this.intersects(spike.boundingBox)){
-                Dog.lifePoint -= 1;
+            if(this.intersects(spike.getBoundingBox())){
+                this.lifePoint -= 1;
                 spikeListIterator.remove();
-                if (Dog.lifePoint == 0){
+                if (this.lifePoint == 0){
                     this.state = DOG_OVER;
                 }
                 break;
@@ -83,11 +82,35 @@ public class Dog {
         ListIterator<Coin> coinListIterator = coinList.listIterator();
         while (coinListIterator.hasNext()){
             Coin coin = coinListIterator.next();
-            if(this.intersects(coin.boundingBox)){
-                Dog.scores += 1;
+            if(this.intersects(coin.getBoundingBox())){
+                this.scores += 1;
                 coinListIterator.remove();
                 break;
             }
         }
+    }
+
+    public float getMovementSpeed() {
+        return movementSpeed;
+    }
+
+    public void setMovementSpeed(float movementSpeed) {
+        this.movementSpeed = movementSpeed;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setScores(int scores) {
+        this.scores = scores;
+    }
+
+    public int getLifePoint() {
+        return lifePoint;
+    }
+
+    public int getScores() {
+        return scores;
     }
 }

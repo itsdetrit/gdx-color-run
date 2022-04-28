@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.entitys;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,11 +9,11 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class Coin {
-    float xPosition,yPosition;
-    float width,height;
-    Rectangle boundingBox;
-    Vector2 directionVector;
-    int movementSpeed;
+    private float xPosition,yPosition;
+    private float width,height;
+    private Rectangle boundingBox;
+    private Vector2 directionVector;
+    private int movementSpeed;
     public static float timeBetweenCoinSpawns = 1f;
     public static float coinSpawnTimer = 0;
 
@@ -69,5 +69,9 @@ public class Coin {
         for (Coin coin : coinList){
             coin.movementSpeed = movementSpeed;
         }
+    }
+
+    public Rectangle getBoundingBox() {
+        return boundingBox;
     }
 }

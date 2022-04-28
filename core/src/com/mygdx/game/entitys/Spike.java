@@ -1,7 +1,6 @@
-package com.mygdx.game;
+package com.mygdx.game.entitys;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -11,11 +10,11 @@ import java.util.Random;
 
 public class Spike {
 
-    float xPosition,yPosition;
-    float width,height;
-    Rectangle boundingBox;
-    Vector2 directionVector;
-    int movementSpeed;
+    private float xPosition,yPosition;
+    private float width,height;
+    private Rectangle boundingBox;
+    private Vector2 directionVector;
+    private int movementSpeed;
     public static float spikeSpawnTimer = 0;
     public static float timeBetweenSpikeSpawns = 1f;
 
@@ -71,5 +70,9 @@ public class Spike {
         for (Spike spike : spikeList){
             spike.movementSpeed = movementSpeed;
         }
+    }
+
+    public Rectangle getBoundingBox() {
+        return boundingBox;
     }
 }

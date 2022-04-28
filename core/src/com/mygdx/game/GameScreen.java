@@ -1,24 +1,22 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import org.w3c.dom.css.Rect;
+import com.mygdx.game.entitys.Coin;
+import com.mygdx.game.entitys.Dog;
+import com.mygdx.game.entitys.Spike;
 
-import java.awt.*;
 import java.util.LinkedList;
 
 public class GameScreen implements Screen {
@@ -48,9 +46,9 @@ public class GameScreen implements Screen {
     private int state;
 
     Vector2 touchPoint;
-    ColorRun game;
+    RGBDog game;
 
-    public GameScreen(ColorRun game){
+    public GameScreen(RGBDog game){
         state = GAME_RUNNING;
         this.game = game;
         camera = new OrthographicCamera();
@@ -74,7 +72,7 @@ public class GameScreen implements Screen {
     }
 
     private void presentGameOver(){
-        if (playerDog.state == Dog.DOG_OVER) {
+        if (playerDog.getState() == Dog.DOG_OVER) {
             pause();
             Rectangle restartBounds = new Rectangle(200,200,restartButton.getRegionWidth(),restartButton.getRegionHeight());
             batch.draw(restartButton,200,200);
@@ -82,7 +80,7 @@ public class GameScreen implements Screen {
                 touchPoint = new Vector2(Gdx.input.getX(),Gdx.input.getY());
                 if (restartBounds.contains(touchPoint.x, touchPoint.y)){
                     game.setScreen(new GameScreen(game));
-                    Dog.scores = 0;
+                    playerDog.setScores(0);
                 }
             }
         }
@@ -109,11 +107,11 @@ public class GameScreen implements Screen {
 
         font.setColor(new Color(0,1,0,1));
         font.getData().setScale(1.5f,1.5f);
-        font.draw(batch,"HP :  "+ Dog.lifePoint,20,550);
+        font.draw(batch,"HP :  "+ playerDog.getLifePoint(),20,550);
 
         font.setColor(new Color(0,1,0,1));
         font.getData().setScale(1.5f,1.5f);
-        font.draw(batch,"Scores :  "+ Dog.scores,20,520);
+        font.draw(batch,"Scores :  "+ playerDog.getScores(),20,520);
 
         playerDog.draw(batch);
         presentGameOver();
@@ -122,7 +120,7 @@ public class GameScreen implements Screen {
     }
 
     public void renderBackground(float delta){
-        backgroundOffSet ++;
+        backgroundOffSet += 2;
         if (backgroundOffSet % WORLD_HEIGHT == 0){
             backgroundOffSet = 0;
         }
@@ -139,7 +137,7 @@ public class GameScreen implements Screen {
     @Override
     public void pause() {
         backgroundOffSet = 0;
-        playerDog.movementSpeed = 0;
+        playerDog.setMovementSpeed(0);
         Spike.setSpikeMovementSpeed(spikeList,0);
         Coin.setCoinMovementSpeed(coinList,0);
         Spike.spikeSpawnTimer = 0;
@@ -149,7 +147,7 @@ public class GameScreen implements Screen {
     @Override
     public void resume() {
         backgroundOffSet ++;
-        playerDog.movementSpeed = 300;
+        playerDog.setMovementSpeed(300);
         Spike.setSpikeMovementSpeed(spikeList,50);
         Coin.setCoinMovementSpeed(coinList,50);
     }

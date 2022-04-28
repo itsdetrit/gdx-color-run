@@ -2,22 +2,21 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 
 public class MainMenuScreen extends ScreenAdapter {
-    ColorRun game;
+    RGBDog game;
     Vector2 touchPoint;
     BitmapFont font = new BitmapFont();
     OrthographicCamera camera;
 
-    public MainMenuScreen(ColorRun game){
+    public MainMenuScreen(RGBDog game){
         this.game = game;
         touchPoint = new Vector2();
         camera = new OrthographicCamera(800,600);
-        camera.position.set(800/2,600/2,0);
+        camera.position.set(400,300,0);
     }
 
     public void render(float delta){
