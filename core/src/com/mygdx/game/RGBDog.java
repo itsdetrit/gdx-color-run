@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class RGBDog extends Game {
 	public SpriteBatch batch;
-	GameScreen gameScreen;
 	
 	@Override
 	public void create () {

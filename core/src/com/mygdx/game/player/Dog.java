@@ -3,15 +3,8 @@ package com.mygdx.game.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.entitys.Coin;
-import com.mygdx.game.entitys.Entity;
-import com.mygdx.game.entitys.Spike;
-
-import java.util.LinkedList;
-import java.util.ListIterator;
 
 public class Dog {
     private float movementSpeed;
@@ -19,8 +12,6 @@ public class Dog {
     private int scores;
     private int state;
     private Rectangle boundingBox;
-    private float xPosition,yPosition;
-    private float width,height;
     private TextureRegion dogTexture;
 
     public static final int DOG_RUNNING = 0;
@@ -29,10 +20,6 @@ public class Dog {
     public Dog(float movementSpeed,float width, float height,
                float xCentre, float yCentre,TextureRegion dogTexture) {
         this.movementSpeed = movementSpeed;
-        this.xPosition = xCentre - width/2;
-        this.yPosition = yCentre - height/2;
-        this.width = width;
-        this.height = height;
         this.dogTexture = dogTexture;
         this.boundingBox = new Rectangle(xCentre-width/2,yCentre-height/2,width,height);
         this.lifePoint = 1;

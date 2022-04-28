@@ -52,12 +52,12 @@ public class Spawner {
     }
 
     private void move(Entity entity, float deltaTime){
-        entity.translate(0,-entity.movementSpeed*deltaTime);
+        entity.translate(0,-entity.getMovementSpeed()*deltaTime);
     }
 
     public void setMovementSpeed(int movementSpeed){
         for (Entity entity : entities){
-            entity.movementSpeed = movementSpeed;
+            entity.setMovementSpeed(movementSpeed);
         }
     }
 
