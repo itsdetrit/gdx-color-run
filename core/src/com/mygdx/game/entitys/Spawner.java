@@ -2,6 +2,7 @@ package com.mygdx.game.entitys;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.player.Dog;
 
 import java.util.LinkedList;
@@ -15,6 +16,7 @@ public class Spawner {
     private LinkedList<Entity> entities;
     private TextureRegion entityTextureRegion;
     private TextureRegion[] textureRegionList;
+    public static Rectangle currentBoundingBox;
 
     public Spawner(float spawnTimer, float timeBetweenSpawns, int width, int height, TextureRegion entityTextureRegion) {
         this.spawnTimer = spawnTimer;
@@ -48,7 +50,7 @@ public class Spawner {
 
         if (spawnTimer > timeBetweenSpawns){
             if (textureRegionList == null){
-                entities.add(new Entity(random.nextInt(361) + 220, WORLD_HEIGHT - 10, width, height, entityTextureRegion) {
+                Entity temp = new Entity(random.nextInt(361) + 220, WORLD_HEIGHT - 10, width, height, entityTextureRegion) {
                     @Override
                     public void onDraw(Batch batch) {
 
@@ -58,11 +60,13 @@ public class Spawner {
                     public void onDetectCollisions(Dog player, int id) {
 
                     }
-                });
+                };
+                currentBoundingBox = temp.getBoundingBox();
+                entities.add(temp);
             } else {
                 int id = random.nextInt(3);
-                entities.add(new Entity(random.nextInt(361) + 220, WORLD_HEIGHT - 10, width, height
-                        , textureRegionList[id],id) {
+                Entity temp = new Entity(random.nextInt(361) + 220, WORLD_HEIGHT - 10, width, height
+                        , textureRegionList[id], id) {
                     @Override
                     public void onDraw(Batch batch) {
 
@@ -70,8 +74,12 @@ public class Spawner {
 
                     @Override
                     public void onDetectCollisions(Dog player, int id) {
+
                     }
-                });
+                };
+                if(!currentBoundingBox.overlaps(temp.getBoundingBox())){
+                    entities.add(temp);
+                }
             }
             spawnTimer -= timeBetweenSpawns;
         }
