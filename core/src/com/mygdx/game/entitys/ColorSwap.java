@@ -17,5 +17,6 @@ public class ColorSwap extends Entity{
     @Override
     public void onDetectCollisions(Dog player, int id) {
         player.randomColor();
+        player.addScore(10);
     }
 }

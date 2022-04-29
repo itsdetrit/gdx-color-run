@@ -51,7 +51,7 @@ public class Spawner {
 
         if (spawnTimer > timeBetweenSpawns){
             if (textureRegionList == null){
-                Entity temp = new Entity(random.nextInt(361) + 220, WORLD_HEIGHT - 10, width, height, entityTextureRegion) {
+                Entity temp = new Entity(random.nextInt(400) + 200, WORLD_HEIGHT - 10, width, height, entityTextureRegion) {
                     @Override
                     public void onDraw(Batch batch) {
 
@@ -66,7 +66,7 @@ public class Spawner {
                 entities.add(temp);
             } else {
                 int id = random.nextInt(3);
-                Entity temp = new Entity(random.nextInt(361) + 220, WORLD_HEIGHT - 10, width, height
+                Entity temp = new Entity(random.nextInt(500) + 150, WORLD_HEIGHT - 10, width, height
                         , textureRegionList[id], id) {
                     @Override
                     public void onDraw(Batch batch) {

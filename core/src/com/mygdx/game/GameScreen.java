@@ -42,13 +42,14 @@ public class GameScreen implements Screen {
     private ColorSwap colorSwapDetector = new ColorSwap();
     private Spawner coinSpawner,spikeSpawner,colorSwapSpawner;
 
-    private BitmapFont font = new BitmapFont();
+    private BitmapFont font;
     private Vector2 touchPoint;
     private RGBDog game;
 
     public GameScreen(RGBDog game){
         this.game = game;
         Random random = new Random();
+        font = new BitmapFont(Gdx.files.internal("font.fnt"), Gdx.files.internal("font.png"), false);
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH,WORLD_HEIGHT,camera);
         textureAtlas = new TextureAtlas("image.atlas");
@@ -112,11 +113,9 @@ public class GameScreen implements Screen {
         colorSwapSpawner.render(deltaTime,batch);
         colorSwapSpawner.spawn(deltaTime,WORLD_HEIGHT);
 
-        font.setColor(new Color(0,1,0,1));
-        font.getData().setScale(1.5f,1.5f);
-        font.draw(batch,"HP :  "+ playerDog.getLifePoint(),20,550);
-        font.draw(batch,"Scores :  "+ playerDog.getScores(),20,520);
-        font.draw(batch,"Color : "+playerDog.getColorText()+" ( id : "+playerDog.getColor()+")",20,490);
+        font.draw(batch,"HP :  "+ playerDog.getLifePoint(),20,580);
+        font.draw(batch,"Scores :  "+ playerDog.getScores(),20,550);
+        font.draw(batch,"Color : "+playerDog.getColorText(),20,520);
 
         playerDog.draw(batch);
         renderGameOver();
