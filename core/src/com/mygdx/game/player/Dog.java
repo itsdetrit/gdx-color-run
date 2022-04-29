@@ -6,30 +6,33 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
+import java.util.Random;
+
 public class Dog {
     private float movementSpeed;
     private int lifePoint;
     private int scores;
     private int state;
     private Rectangle boundingBox;
-    private TextureRegion dogTexture;
+    private TextureRegion[] textureList;
     private int color;
+    Random random = new Random();
 
     public static final int DOG_RUNNING = 0;
     public static final int DOG_OVER = 1;
 
     public Dog(float movementSpeed,float width, float height,
-               float xCentre, float yCentre,TextureRegion dogTexture, int color) {
+               float xCentre, float yCentre, TextureRegion[] textureList) {
         this.movementSpeed = movementSpeed;
-        this.dogTexture = dogTexture;
         this.boundingBox = new Rectangle(xCentre-width/2,yCentre-height/2,width,height);
         this.lifePoint = 1;
         this.state = DOG_RUNNING;
-        this.color = color;
+        this.textureList = textureList;
+        randomColor();
     }
 
     public void draw(Batch batch){
-        batch.draw(dogTexture,boundingBox.x,boundingBox.y,boundingBox.width,boundingBox.height);
+        batch.draw(textureList[color],boundingBox.x,boundingBox.y,boundingBox.width,boundingBox.height);
     }
 
     public void translate(float xChange,float yChange){
@@ -104,5 +107,9 @@ public class Dog {
                 return "Blue";
         }
         return "null";
+    }
+
+    public void randomColor() {
+        this.color = random.nextInt(3);
     }
 }

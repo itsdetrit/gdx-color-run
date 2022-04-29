@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.entitys.Coin;
+import com.mygdx.game.entitys.ColorSwap;
 import com.mygdx.game.entitys.Spawner;
 import com.mygdx.game.player.Dog;
 import com.mygdx.game.entitys.Spike;
@@ -32,13 +33,14 @@ public class GameScreen implements Screen {
     private TextureRegion background;
     private TextureRegion redDogTextureRegion,greenDogTextureRegion,blueDogTextureRegion
             ,redCoinTextureRegion,greenCoinTextureRegion,blueCoinTextureRegion,coinTextureRegion
-            ,spikeTextureRegion;
+            ,spikeTextureRegion,colorSwapTextureRegion;
     private TextureRegion restartButton;
 
     private Dog playerDog;
     private Coin coinDetector = new Coin();
     private Spike spikeDetector = new Spike();
-    private Spawner coinSpawner,spikeSpawner;
+    private ColorSwap colorSwapDetector = new ColorSwap();
+    private Spawner coinSpawner,spikeSpawner,colorSwapSpawner;
 
     private BitmapFont font = new BitmapFont();
     private Vector2 touchPoint;
@@ -62,6 +64,7 @@ public class GameScreen implements Screen {
         redCoinTextureRegion = textureAtlas.findRegion("redcoin");
         greenCoinTextureRegion = textureAtlas.findRegion("greencoin");
         blueCoinTextureRegion = textureAtlas.findRegion("bluecoin");
+        colorSwapTextureRegion = textureAtlas.findRegion("coin");
 
         spikeTextureRegion = textureAtlas.findRegion("spike");
         restartButton = itemAtlas.findRegion("restart");
@@ -78,12 +81,11 @@ public class GameScreen implements Screen {
                 blueCoinTextureRegion
         };
 
-        int randomDogColor = random.nextInt(3);
 
-        playerDog = new Dog(300,50,50,WORLD_WIDTH/2,WORLD_HEIGHT/10
-                ,dogList[randomDogColor], randomDogColor);
+        playerDog = new Dog(300,50,50,WORLD_WIDTH/2,WORLD_HEIGHT/10,dogList);
         coinSpawner = new Spawner(0,1f,30,30,coinTextureRegion,coinList);
-        spikeSpawner = new Spawner(0,1f,100,30,spikeTextureRegion);
+        spikeSpawner = new Spawner(0,1.5f,100,30,spikeTextureRegion);
+        colorSwapSpawner = new Spawner(0,25f,30,30,colorSwapTextureRegion);
 
         batch = new SpriteBatch();
     }
@@ -101,11 +103,14 @@ public class GameScreen implements Screen {
         playerDog.detectInput(deltaTime,WORLD_WIDTH);
         spikeDetector.detectCollisions(spikeSpawner.getEntities(), playerDog);
         coinDetector.detectCollisions(coinSpawner.getEntities(), playerDog);
+        colorSwapDetector.detectCollisions(colorSwapSpawner.getEntities(), playerDog);
 
         spikeSpawner.render(deltaTime,batch);
         spikeSpawner.spawn(deltaTime,WORLD_HEIGHT);
         coinSpawner.render(deltaTime,batch);
         coinSpawner.spawn(deltaTime,WORLD_HEIGHT);
+        colorSwapSpawner.render(deltaTime,batch);
+        colorSwapSpawner.spawn(deltaTime,WORLD_HEIGHT);
 
         font.setColor(new Color(0,1,0,1));
         font.getData().setScale(1.5f,1.5f);
@@ -129,11 +134,15 @@ public class GameScreen implements Screen {
     public void pause() {
         backgroundOffSet = 0;
         playerDog.setMovementSpeed(0);
+
         spikeSpawner.setMovementSpeed(0);
         spikeSpawner.setSpawnTimer(0);
 
         coinSpawner.setMovementSpeed(0);
         coinSpawner.setSpawnTimer(0);
+
+        colorSwapSpawner.setMovementSpeed(0);
+        colorSwapSpawner.setSpawnTimer(0);
     }
 
     @Override
@@ -141,8 +150,8 @@ public class GameScreen implements Screen {
         backgroundOffSet ++;
         playerDog.setMovementSpeed(300);
         spikeSpawner.setMovementSpeed(50);
-
         coinSpawner.setMovementSpeed(50);
+        colorSwapSpawner.setMovementSpeed(50);
     }
 
     @Override

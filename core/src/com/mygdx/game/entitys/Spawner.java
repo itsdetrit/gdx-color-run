@@ -9,9 +9,8 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class Spawner {
-
-    private float spawnTimer = 0;
-    private float timeBetweenSpawns = 1f;
+    private float spawnTimer;
+    private float timeBetweenSpawns;
     private int width,height;
     private LinkedList<Entity> entities;
     private TextureRegion entityTextureRegion;
@@ -25,6 +24,7 @@ public class Spawner {
         this.height = height;
         this.entityTextureRegion = entityTextureRegion;
         entities = new LinkedList<>();
+        currentBoundingBox = new Rectangle();
     }
 
     public Spawner(float spawnTimer, float timeBetweenSpawns, int width, int height, TextureRegion defaultTextureRegion, TextureRegion[] textureRegionList) {
@@ -35,6 +35,7 @@ public class Spawner {
         this.entityTextureRegion = defaultTextureRegion;
         this.textureRegionList = textureRegionList;
         entities = new LinkedList<>();
+        currentBoundingBox = new Rectangle();
     }
 
     public void render(float delta, Batch batch){
