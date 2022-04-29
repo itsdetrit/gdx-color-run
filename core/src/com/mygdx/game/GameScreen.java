@@ -64,7 +64,7 @@ public class GameScreen implements Screen {
         redCoinTextureRegion = textureAtlas.findRegion("redcoin");
         greenCoinTextureRegion = textureAtlas.findRegion("greencoin");
         blueCoinTextureRegion = textureAtlas.findRegion("bluecoin");
-        colorSwapTextureRegion = textureAtlas.findRegion("coin");
+        colorSwapTextureRegion = textureAtlas.findRegion("colorswap");
 
         spikeTextureRegion = textureAtlas.findRegion("spike");
         restartButton = itemAtlas.findRegion("restart");
@@ -85,7 +85,7 @@ public class GameScreen implements Screen {
         playerDog = new Dog(300,50,50,WORLD_WIDTH/2,WORLD_HEIGHT/10,dogList);
         coinSpawner = new Spawner(0,1f,30,30,coinTextureRegion,coinList);
         spikeSpawner = new Spawner(0,1.5f,100,30,spikeTextureRegion);
-        colorSwapSpawner = new Spawner(0,25f,30,30,colorSwapTextureRegion);
+        colorSwapSpawner = new Spawner(0,25f,60,60,colorSwapTextureRegion);
 
         batch = new SpriteBatch();
     }
