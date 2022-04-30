@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -46,6 +47,8 @@ public class GameScreen implements Screen {
     private Vector2 touchPoint;
     private RGBDog game;
 
+    private Music music;
+
     public GameScreen(RGBDog game){
         this.game = game;
         Random random = new Random();
@@ -69,6 +72,10 @@ public class GameScreen implements Screen {
 
         spikeTextureRegion = textureAtlas.findRegion("spike");
         restartButton = itemAtlas.findRegion("restart");
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("sound/background.mp3"));
+        music.setLooping(true);
+        music.setVolume(0.01f);
 
         TextureRegion[] dogList = {
                 redDogTextureRegion,
@@ -117,6 +124,8 @@ public class GameScreen implements Screen {
         font.draw(batch,"Scores :  "+ playerDog.getScores(),20,550);
         font.draw(batch,"Color : "+playerDog.getColorText(),20,520);
 
+        music.play();
+
         playerDog.draw(batch);
         renderGameOver();
 
@@ -142,6 +151,8 @@ public class GameScreen implements Screen {
 
         colorSwapSpawner.setMovementSpeed(0);
         colorSwapSpawner.setSpawnTimer(0);
+
+        music.pause();
     }
 
     @Override
@@ -164,7 +175,7 @@ public class GameScreen implements Screen {
     }
 
     private void renderGameOver(){
-        if (playerDog.getState() == Dog.DOG_OVER) {
+        if (playerDog.getState() == Dog.DOG_OVER){
             pause();
             Rectangle restartBounds = new Rectangle(200,250,restartButton.getRegionWidth(),restartButton.getRegionHeight());
             batch.draw(restartButton,200,250);

@@ -25,7 +25,7 @@ public class Dog {
                float xCentre, float yCentre, TextureRegion[] textureList) {
         this.movementSpeed = movementSpeed;
         this.boundingBox = new Rectangle(xCentre-width/2,yCentre-height/2,width,height);
-        this.lifePoint = 1;
+        this.lifePoint = 3;
         this.state = DOG_RUNNING;
         this.textureList = textureList;
         randomColor();
